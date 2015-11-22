@@ -1,1 +1,10 @@
 *.pyc
+
+# Vagrant
+/.vagrant/
+/Vagrantfile
+
+# Python coverage
+/.coverage
+/coverage.xml
+/htmlcov/
