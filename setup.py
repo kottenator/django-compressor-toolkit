@@ -1,8 +1,10 @@
 from setuptools import setup
+import compressor_toolkit
+
 
 setup(
     name='django-compressor-toolkit',
-    version='0.0.1',
+    version=compressor_toolkit.__version__,
     description='Set of plug-ins for django-compressor',
     url='https://github.com/kottenator/django-compressor-toolkit',
     author='Rostyslav Bryzgunov',
