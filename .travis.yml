@@ -5,14 +5,7 @@ python:
 before_install:
   - nvm install 4.0
   - npm install -g node-sass postcss-cli autoprefixer
-env:
-  - DJANGO_VERSION=1.7.0
-  - DJANGO_VERSION=1.8.0
-  - DJANGO_COMPRESSOR_VERSION=1.4
-  - DJANGO_COMPRESSOR_VERSION=1.5
 install:
-  - pip install -q Django~=$DJANGO_VERSION
-  - pip install -q django-compressor==$DJANGO_COMPRESSOR_VERSION
   - pip install -e .[test]
 script:
   - py.test
