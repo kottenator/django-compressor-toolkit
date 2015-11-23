@@ -5,8 +5,9 @@ python:
   - 3.5
 node_js:
   - 4.0
+before_install:
+  - sudo npm install -g node-sass postcss-cli autoprefixer
 install:
   - pip install -e .[test]
-  - npm install -g node-sass postcss-cli autoprefixer
 script:
   - py.test
