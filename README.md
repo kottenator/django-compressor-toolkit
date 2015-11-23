@@ -1,5 +1,7 @@
 # django-compressor-toolkit
 
+[![Build Status](https://travis-ci.org/kottenator/django-compressor-toolkit.svg?branch=master)](https://travis-ci.org/kottenator/django-compressor-toolkit)
+
 Set of plug-ins for [django-compressor](https://github.com/django-compressor/django-compressor/).
 
 ## Installation
@@ -13,7 +15,7 @@ pip install django-compressor-toolset
 ### SCSS pre-compiler
 
 Custom filter for [node-sass](https://github.com/sass/node-sass)
-+ [Autoprefixer](https://github.com/postcss/autoprefixer) integration.
+with [Autoprefixer](https://github.com/postcss/autoprefixer) integration.
 
 What does it do:
 
@@ -51,7 +53,7 @@ And include SCSS in your template:
 {% endcompress %}
 ```
 
-To make it work, you need `node-sass` and `postcss` w/ `autoprefixer` to be installed.
+To make it work, you need `node-sass` and `postcss` with `autoprefixer` to be installed.
 
 Quick install:
 
