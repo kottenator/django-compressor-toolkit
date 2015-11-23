@@ -1,9 +1,12 @@
 language: python
 python:
-  - 2.7
+#  - 2.7
   - 3.4
   - 3.5
+node_js:
+  - 4.0
 install:
   - pip install -e .[test]
+  - npm install -g node-sass postcss-cli autoprefixer
 script:
   - py.test
