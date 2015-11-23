@@ -57,4 +57,4 @@ class ScssFilter(CompilerFilter):
         self.options += (
             ('include-static', ' '.join(['--include-path {}'.format(s) for s in static_dirs])),
         )
-        super().__init__(content, self.command, *args, **kwargs)
+        super(ScssFilter, self).__init__(content, self.command, *args, **kwargs)
