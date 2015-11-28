@@ -7,7 +7,7 @@ Set of plug-ins for [django-compressor](https://github.com/django-compressor/dja
 ## Installation
 
 ```sh
-pip install django-compressor-toolset
+pip install django-compressor-toolkit
 ```
 
 ## Tools
@@ -25,15 +25,17 @@ What does it do:
 It also includes all the available static sources so you could import them in your SCSS code:
 
 ```css
-/* home/scss/styles.scss */
+/* app/scss/styles.scss */
 @import "base/scss/variables";
 
 .error-message {
+    // variables from 'base' Django app: 'static/base/scss/variables.scss'
     background-color: $primary-red-color;
+    color: $white-color;
 }
 ```
 
-… where `home` and `base` - Django apps.
+… where `app` and `base` - Django apps.
 
 #### Use it
 
@@ -49,7 +51,7 @@ And include SCSS in your template:
 
 ```html
 {% compress css %}
-<link type="text/x-scss" href="{% static 'home/scss/styles.scss' %}">
+<link type="text/x-scss" href="{% static 'app/scss/styles.scss' %}">
 {% endcompress %}
 ```
 

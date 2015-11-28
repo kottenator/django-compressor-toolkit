@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+
+{% load static %}
+{% load compress %}
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Compressor Tookit Tests: SCSS File Inclusion</title>
+
+  {% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'app/layout.scss' %}">
+  {% endcompress %}
+</head>
+<body>
+  <h1 class="title">Compressor Tookit Tests: SCSS File Inclusion</h1>
+</body>
+</html>
