@@ -31,7 +31,7 @@ def pytest_configure():
         COMPRESS_ROOT=COMPRESS_ROOT,
         COMPRESS_PRECOMPILERS=(
             ('text/x-scss', 'compressor_toolkit.precompilers.SCSSFilter'),
-            ('module', 'compressor_toolkit.precompilers.ES6Filter')
+            ('module', 'compressor_toolkit.precompilers.ES6AMDFilter')
         ),
         COMPRESS_ENABLED=False
     )
