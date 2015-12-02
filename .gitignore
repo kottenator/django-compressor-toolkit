@@ -1,4 +1,6 @@
+# Project generated files
 *.pyc
+/tests/compressor/
 
 # Vagrant
 /.vagrant/

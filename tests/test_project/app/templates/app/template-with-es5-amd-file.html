@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+{% load static %}
+{% load compress %}
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Compressor Tookit Tests: ES5 file, included as AMD</title>
+  {% compress js %}
+    <script src="{% static 'lib/require.js' %}"></script>
+    <script>
+      require.config({
+        baseUrl: '{{ STATIC_URL }}'
+      });
+
+      require(['base/utils'], function(utils) {
+        console.log("Secret key:", utils.key);
+      });
+    </script>
+  {% endcompress %}
+</head>
+<body>
+  <h1 class="title">
+    Compressor Tookit Tests: ES5 file, included as AMD
+  </h1>
+  <p>
+    Expected result: JS console output:
+  </p>
+  <pre><code>
+    > Secret key: abc123
+  </code></pre>
+</body>
+</html>

@@ -6,7 +6,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Compressor Tookit Tests: Inline SCSS Inclusion</title>
+  <title>Compressor Tookit Tests: Inline SCSS → inline CSS</title>
 
   {% compress css %}
     <style type="text/x-scss">
@@ -21,6 +21,11 @@
   {% endcompress %}
 </head>
 <body>
-  <h1 class="title">Compressor Tookit Tests: Inline SCSS Inclusion</h1>
+  <h1 class="title">
+    Compressor Tookit Tests: Inline SCSS, transformed to inline CSS
+  </h1>
+  <p>
+    Expected result: inline CSS code generated and styles applied to the title above
+  </p>
 </body>
 </html>

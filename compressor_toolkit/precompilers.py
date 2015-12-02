@@ -1,6 +1,9 @@
+import os
+
+from compressor.filters import CompilerFilter
 from django.conf import settings
 from django.contrib.staticfiles import finders
-from compressor.filters import CompilerFilter
+from django.core.exceptions import ImproperlyConfigured
 
 
 def get_all_static():
@@ -24,7 +27,7 @@ def get_all_static():
     return static_dirs
 
 
-class ScssFilter(CompilerFilter):
+class SCSSFilter(CompilerFilter):
     """
     django-compressor pre-compiler for SCSS files.
 
@@ -54,7 +57,44 @@ class ScssFilter(CompilerFilter):
             }
         """
         static_dirs = get_all_static()
+
         self.options += (
             ('include-static', ' '.join(['--include-path {}'.format(s) for s in static_dirs])),
         )
-        super(ScssFilter, self).__init__(content, self.command, *args, **kwargs)
+
+        super(SCSSFilter, self).__init__(content, self.command, *args, **kwargs)
+
+
+class ES6AMDFilter(CompilerFilter):
+    """
+    django-compressor pre-compiler for ES6 files.
+
+    Transforms ES6 to ES5 AMD module using ``babel``.
+    """
+    command = (
+        'babel --presets=es2015 --plugins=transform-es2015-modules-amd '
+        '--module-id={module-id} "{infile}" -o "{outfile}"'
+    )
+
+    def __init__(self, content, attrs, *args, **kwargs):
+        """
+        Add extra option for compiler:
+
+            'module-id': 'app/script'
+
+        That's AMD module ID for '/static/app/script.js' static file.
+        """
+        module_id = attrs.get('data-module-id')
+        if not module_id:
+            module_src = attrs.get('src')
+            if not module_src:
+                raise ImproperlyConfigured(
+                    "Module should contain either \"data-module-id\" or \"src\" attribute"
+                )
+            module_id = os.path.splitext(module_src.replace(settings.STATIC_URL, ''))[0]
+
+        self.options += (
+            ('module-id', module_id),
+        )
+
+        super(ES6AMDFilter, self).__init__(content, self.command, *args, **kwargs)

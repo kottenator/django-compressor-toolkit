@@ -26,7 +26,7 @@ def test_view_with_inline_scss(client):
 
     :param client: ``pytest-django`` fixture: Django test client
     """
-    response = client.get(reverse('inline-scss'))
+    response = client.get(reverse('scss-inline'))
     assert response.status_code == 200
     assert b'<style type="text/css">' \
            b'.title {\n  margin: 0;\n  padding: 0;\n  font: bold 30px Arial, sans-serif;\n}\n' \

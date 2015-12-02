@@ -25,10 +25,13 @@ def pytest_configure():
             'compressor.finders.CompressorFinder'
         ),
         MIDDLEWARE_CLASSES=(),
-        TEMPLATE_CONTEXT_PROCESSORS=(),
+        TEMPLATE_CONTEXT_PROCESSORS=(
+            'django.template.context_processors.static',
+        ),
         COMPRESS_ROOT=COMPRESS_ROOT,
         COMPRESS_PRECOMPILERS=(
-            ('text/x-scss', 'compressor_toolkit.precompilers.ScssFilter'),
+            ('text/x-scss', 'compressor_toolkit.precompilers.SCSSFilter'),
+            ('module', 'compressor_toolkit.precompilers.ES6Filter')
         ),
         COMPRESS_ENABLED=False
     )

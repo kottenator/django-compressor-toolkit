@@ -10,7 +10,7 @@ Set of plug-ins for [django-compressor](https://github.com/django-compressor/dja
 pip install django-compressor-toolkit
 ```
 
-## Tools
+## Plug-ins
 
 ### SCSS pre-compiler
 
@@ -24,12 +24,11 @@ What does it do:
 
 It also includes all the available static sources so you could import them in your SCSS code:
 
-```css
+```scss
 /* app/scss/styles.scss */
 @import "base/scss/variables";
 
 .error-message {
-    // variables from 'base' Django app: 'static/base/scss/variables.scss'
     background-color: $primary-red-color;
     color: $white-color;
 }
@@ -43,7 +42,7 @@ Add it to your settings:
 
 ```py
 COMPRESS_PRECOMPILERS = (
-    ('text/x-scss', 'compressor_toolkit.precompilers.ScssFilter'),
+    ('text/x-scss', 'compressor_toolkit.precompilers.SCSSFilter'),
 )
 ```
 

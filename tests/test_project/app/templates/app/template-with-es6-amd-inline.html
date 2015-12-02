@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+{% load static %}
+{% load compress %}
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Compressor Tookit Tests: Inline ES6 → inline ES5 AMD</title>
+
+  {% compress js %}
+    <script src="{% static 'lib/require.js' %}"></script>
+    <script type="module" data-module-id="inline/utils">
+      export let square = x => x * x;
+    </script>
+    <script>
+      require(['inline/utils'], function(utils) {
+        console.log("Square of 2:", utils.square(2));
+      });
+    </script>
+  {% endcompress %}
+</head>
+<body>
+  <h1 class="title">
+    Compressor Tookit Tests: Inline ES6, transformed to inline ES5 with AMD
+  </h1>
+  <p>
+    Expected result: inline JS (ES5, AMD) code generated and JS console output:
+  </p>
+  <pre><code>
+    > Square of 2: 4
+  </code></pre>
+</body>
+</html>
