@@ -72,7 +72,8 @@ class ES6AMDFilter(CompilerFilter):
     Transforms ES6 to ES5 AMD module using ``babel``.
     """
     command = (
-        'babel --presets=es2015 --plugins=transform-es2015-modules-amd '
+        'babel --presets=/usr/lib/node_modules/babel-preset-es2015 '
+        '--plugins=/usr/lib/node_modules/babel-plugin-transform-es2015-modules-amd '
         '--module-id={module-id} "{infile}" -o "{outfile}"'
     )
 
