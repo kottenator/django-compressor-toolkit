@@ -13,7 +13,7 @@ def test_view_with_scss_file(client, assert_precompiled):
     assert_precompiled(
         'app/layout.scss',
         'css',
-        '.title {\n  margin: 0;\n  padding: 0;\n  font: bold 30px Arial, sans-serif;\n}\n'
+        '.title {\n  font: bold 30px Arial, sans-serif;\n}\n'
     )
 
 
