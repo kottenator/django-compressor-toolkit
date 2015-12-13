@@ -37,7 +37,7 @@ It also enables Django static imports in SCSS:
 
 … where `app` and `base` - Django apps.
 
-#### Installation
+#### Usage
 
 ```py
 // settings.py
@@ -92,7 +92,7 @@ By default, AMD module ID is generated from file URL:
 `{{ STATIC_URL }}app/js/module.js` → `app/js/module`,
 but you can set it explicitly - see the example below.
 
-#### Installation
+#### Usage
 
 ```py
 // settings.py
