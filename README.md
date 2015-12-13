@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/kottenator/django-compressor-toolkit.svg?branch=master)](https://travis-ci.org/kottenator/django-compressor-toolkit)
 
 Set of add-ons for [django-compressor](https://github.com/django-compressor/django-compressor/)
-that simply enables SCSS and ES2015 in your Django project.
+that simply enables SCSS and ES6 in your Django project.
 
 ## Installation
 
