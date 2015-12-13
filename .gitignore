@@ -1,6 +1,7 @@
 # Project generated files
 *.pyc
-/tests/compressor/
+/tests/test_project/compressor/
+/*.egg-info
 
 # Vagrant
 /.vagrant/

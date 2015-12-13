@@ -14,7 +14,7 @@
         baseUrl: '{{ STATIC_URL }}'
       });
 
-      require(['base/utils'], function(utils) {
+      require(['../../../base/static/base/utils'], function(utils) {
         console.log("Secret key:", utils.key);
       });
     </script>

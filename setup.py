@@ -22,7 +22,8 @@ setup(
             'django',
             'pytest',
             'pytest-django',
-            'pytest-cov'
+            'pytest-cov',
+            'pytest-pythonpath'
         ]
     },
     classifiers=[

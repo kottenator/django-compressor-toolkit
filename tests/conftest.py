@@ -3,39 +3,6 @@ import os
 from django.conf import settings
 import pytest
 
-from tests.utils import COMPRESS_ROOT
-
-
-def pytest_configure():
-    settings.configure(
-        DEBUG=True,
-        SECRET_KEY='*****',
-        INSTALLED_APPS=(
-            'django.contrib.staticfiles',
-            'compressor',
-            'compressor_toolkit',
-            'tests.test_project.base',
-            'tests.test_project.app'
-        ),
-        ROOT_URLCONF='tests.test_project.urls',
-        STATIC_URL='/static/',
-        STATICFILES_FINDERS=(
-            'django.contrib.staticfiles.finders.FileSystemFinder',
-            'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-            'compressor.finders.CompressorFinder'
-        ),
-        MIDDLEWARE_CLASSES=(),
-        TEMPLATE_CONTEXT_PROCESSORS=(
-            'django.template.context_processors.static',
-        ),
-        COMPRESS_ROOT=COMPRESS_ROOT,
-        COMPRESS_PRECOMPILERS=(
-            ('text/x-scss', 'compressor_toolkit.precompilers.SCSSFilter'),
-            ('module', 'compressor_toolkit.precompilers.ES6AMDFilter')
-        ),
-        COMPRESS_ENABLED=False
-    )
-
 
 @pytest.fixture
 def assert_precompiled():
@@ -62,7 +29,7 @@ def assert_precompiled():
         original_file_name = os.path.basename(original_file_path)
 
         compiled_file_path = os.path.join(
-            COMPRESS_ROOT,
+            settings.COMPRESS_ROOT,
             Compressor(output_prefix=file_type).get_filepath(
                 compiled_file_contents,
                 original_file_name
@@ -76,5 +43,3 @@ def assert_precompiled():
             assert compiled_file.read() == compiled_file_contents
 
     return runner
-
-
