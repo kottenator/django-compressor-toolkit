@@ -2,7 +2,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.templatetags.static import static
 import pytest
 
-from compressor_toolkit.precompilers import SCSSFilter, ES6AMDFilter
+from compressor_toolkit.precompilers import SCSSFilter, ES6Filter
 
 
 def test_scss_filter():
@@ -25,7 +25,7 @@ def test_scss_filter():
 
 def test_es6_amd_filter():
     """
-    Test ``compressor_toolkit.precompilers.ES6AMDFilter`` on simple ES6 input.
+    Test ``compressor_toolkit.precompilers.ES6Filter`` on simple ES6 input.
     """
     input_es6 = 'export let CONST = 1'
     output_js = (
@@ -40,17 +40,17 @@ def test_es6_amd_filter():
     )
 
     module_id = 'my-module'
-    assert ES6AMDFilter(
+    assert ES6Filter(
         input_es6,
         {'data-module-id': module_id}
     ).input() == output_js % module_id
 
     module_url = static('my-app/sub/module.js')
     module_id = 'my-app/sub/module'
-    assert ES6AMDFilter(
+    assert ES6Filter(
         input_es6,
         {'src': module_url}
     ).input() == output_js % module_id
 
     with pytest.raises(ImproperlyConfigured):
-        ES6AMDFilter(input_es6, {}).input()
+        ES6Filter(input_es6, {}).input()

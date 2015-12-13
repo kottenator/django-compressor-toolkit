@@ -65,7 +65,7 @@ class SCSSFilter(CompilerFilter):
         super(SCSSFilter, self).__init__(content, self.command, *args, **kwargs)
 
 
-class ES6AMDFilter(CompilerFilter):
+class ES6Filter(CompilerFilter):
     """
     django-compressor pre-compiler for ES6 files.
 
@@ -99,4 +99,4 @@ class ES6AMDFilter(CompilerFilter):
             ('module-id', module_id),
         )
 
-        super(ES6AMDFilter, self).__init__(content, self.command, *args, **kwargs)
+        super(ES6Filter, self).__init__(content, self.command, *args, **kwargs)

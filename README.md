@@ -74,7 +74,7 @@ Quick install:
 npm install -g node-sass postcss-cli autoprefixer
 ```
 
-### ES6 AMD pre-compiler
+### ES6 pre-compiler
 
 ES6 is a new standard for JavaScript that brings
 [great new features](https://hacks.mozilla.org/category/es6-in-depth/).
@@ -98,7 +98,7 @@ but you can set it explicitly - see the example below.
 // settings.py
 
 COMPRESS_PRECOMPILERS = (
-    ('module', 'compressor_toolkit.precompilers.ES6AMDFilter'),
+    ('module', 'compressor_toolkit.precompilers.ES6Filter'),
 )
 ```
 
