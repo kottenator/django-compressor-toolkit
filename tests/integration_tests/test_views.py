@@ -26,7 +26,7 @@ def test_view_with_inline_scss(client):
     response = client.get(reverse('scss-inline'))
     assert response.status_code == 200
     assert b'<style type="text/css">' \
-           b'.title {\n  margin: 0;\n  padding: 0;\n  font: bold 30px Arial, sans-serif;\n}\n' \
+           b'.title {\n  font: bold 30px Arial, sans-serif;\n}\n' \
            b'</style>' in response.content
 
 

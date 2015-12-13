@@ -23,19 +23,7 @@ SCSS → (
 [Autoprefixer](https://github.com/postcss/autoprefixer)
 ) → CSS.
 
-It also enables Django static imports in SCSS:
-
-```scss
-/* app/scss/styles.scss */
-@import "base/scss/variables";
-
-.error-message {
-  background-color: $primary-red-color;
-  color: $white-color;
-}
-```
-
-… where `app` and `base` - Django apps.
+It also enables Django static imports in SCSS, see the example below.
 
 #### Usage
 
@@ -53,22 +41,29 @@ COMPRESS_PRECOMPILERS = (
 {% load compress %}
 
 {% compress css %}
-  <link type="text/x-scss" href="{% static 'app/scss/styles.scss' %}">
-  <style type="text/x-scss">
-    $link-color: #369;
-    a {
-      color: $link-color;
-      &:focus, &:active {
-        color: darken($link-color, 10);
-      }
-    }
-  </style>
+  <link type="text/x-scss" href="{% static 'app/layout.scss' %}">
 {% endcompress %}
 ```
 
-You need `node-sass`, `postcss` and `autoprefixer` to be installed.
+```scss
+/* base/static/base/variables.scss */
 
-Quick install:
+$title-size: 30px;
+```
+
+```scss
+/* app/static/app/layout.scss */
+
+@import "base/variables";
+
+.title {
+  font: bold $title-size Arial, sans-serif;
+}
+```
+
+#### Requisites
+
+You need `node-sass`, `postcss` and `autoprefixer` to be installed. Quick install:
 
 ```sh
 npm install -g node-sass postcss-cli autoprefixer
@@ -110,22 +105,40 @@ COMPRESS_PRECOMPILERS = (
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.22/require.js"></script>
 
 {% compress js %}
-  <script type="module" src="{% static 'base/common.js' %}"></script>
-  <script type="module" data-module-id="page/specific" src="{% static 'app/specific.js' %}"></script>
-  <script type="module" data-module-id="page/inline">
-    import { x } from 'base/common';
-    export let y = x * 5;
-  </script>
+  <script type="module" src="{% static 'base/framework.js' %}"></script>
+  <script type="module" data-module-id="main/scripts" src="{% static 'app/scripts.js' %}"></script>
   <script>
     // entry point
-    require(['base/common', 'page/specific', 'page/inline']);
+    require(['main/scripts']);
   </script>
 {% endcompress %}
 ```
 
-You need `babel-cli`, `babel-preset-es2015` and `babel-plugin-transform-es2015-modules-amd` to be installed.
+```js
+// base/static/base/framework.js
 
-Quick install:
+export let version = '1.0';
+
+export default class {
+  constructor(customVersion) {
+    console.log(`Framework v${customVersion || version} initialized`);
+  }
+}
+```
+
+```js
+// app/static/app/scripts.js
+
+import Framework from 'base/framework';
+
+new Framework;
+new Framework('1.0.1');
+```
+
+#### Requisites
+
+You need `babel-cli`, `babel-preset-es2015` and `babel-plugin-transform-es2015-modules-amd`
+to be installed. Quick install:
 
 ```sh
 npm install -g babel-cli babel-preset-es2015 babel-plugin-transform-es2015-modules-amd
