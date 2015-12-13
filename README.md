@@ -2,7 +2,8 @@
 
 [![Build Status](https://travis-ci.org/kottenator/django-compressor-toolkit.svg?branch=master)](https://travis-ci.org/kottenator/django-compressor-toolkit)
 
-Set of plug-ins for [django-compressor](https://github.com/django-compressor/django-compressor/).
+Set of add-ons for [django-compressor](https://github.com/django-compressor/django-compressor/)
+that simply enables SCSS and ES2015 in your Django project.
 
 ## Installation
 
@@ -10,51 +11,62 @@ Set of plug-ins for [django-compressor](https://github.com/django-compressor/dja
 pip install django-compressor-toolkit
 ```
 
-## Plug-ins
+## Add-ons
 
 ### SCSS pre-compiler
 
-Custom filter for [node-sass](https://github.com/sass/node-sass)
-with [Autoprefixer](https://github.com/postcss/autoprefixer) integration.
+[SCSS](http://sass-lang.com/) is a great language that saves your time and brings joy to CSS development.
 
-What does it do:
+The add-on does next:
+SCSS → (
+[node-sass](https://github.com/sass/node-sass) +
+[Autoprefixer](https://github.com/postcss/autoprefixer)
+) → CSS.
 
-- `node-sass input.scss output.css`
-- `postcss --use autoprefixer -r output.css`
-
-It also includes all the available static sources so you could import them in your SCSS code:
+It also enables Django static imports in SCSS:
 
 ```scss
 /* app/scss/styles.scss */
 @import "base/scss/variables";
 
 .error-message {
-    background-color: $primary-red-color;
-    color: $white-color;
+  background-color: $primary-red-color;
+  color: $white-color;
 }
 ```
 
 … where `app` and `base` - Django apps.
 
-#### Use it
-
-Add it to your settings:
+#### Installation
 
 ```py
+// settings.py
+
 COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'compressor_toolkit.precompilers.SCSSFilter'),
 )
 ```
 
-And include SCSS in your template:
-
 ```html
+{# Django template #}
+
+{% load compress %}
+
 {% compress css %}
-<link type="text/x-scss" href="{% static 'app/scss/styles.scss' %}">
+  <link type="text/x-scss" href="{% static 'app/scss/styles.scss' %}">
+  <style type="text/x-scss">
+    $link-color: #369;
+    a {
+      color: $link-color;
+      &:focus, &:active {
+        color: darken($link-color, 10);
+      }
+    }
+  </style>
 {% endcompress %}
 ```
 
-To make it work, you need `node-sass` and `postcss` with `autoprefixer` to be installed.
+You need `node-sass`, `postcss` and `autoprefixer` to be installed.
 
 Quick install:
 
@@ -62,6 +74,59 @@ Quick install:
 npm install -g node-sass postcss-cli autoprefixer
 ```
 
-Full instructions:
-- [node-sass](https://github.com/sass/node-sass) docs
-- [Autoprefixer](https://github.com/postcss/autoprefixer) docs
+### ES6 AMD pre-compiler
+
+ES6 is a new standard for JavaScript that brings
+[great new features](https://hacks.mozilla.org/category/es6-in-depth/).
+
+The standard was approved in July 2015 and not all modern browsers fully support it for now.
+But there is a way to use it: transpilers that compile ES6 into good old ES5 syntax.
+
+The add-on does next:
+ES6 → (
+[Babel](https://github.com/sass/node-sass) +
+[AMD](https://github.com/amdjs/amdjs-api/blob/master/AMD.md)
+) → ES5.
+
+By default, AMD module ID is generated from file URL:
+`{{ STATIC_URL }}app/js/module.js` → `app/js/module`,
+but you can set it explicitly - see the example below.
+
+#### Installation
+
+```py
+// settings.py
+
+COMPRESS_PRECOMPILERS = (
+    ('module', 'compressor_toolkit.precompilers.ES6AMDFilter'),
+)
+```
+
+```html
+{# Django template #}
+
+{% load compress %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.22/require.js"></script>
+
+{% compress js %}
+  <script type="module" src="{% static 'base/common.js' %}"></script>
+  <script type="module" data-module-id="page/specific" src="{% static 'app/specific.js' %}"></script>
+  <script type="module" data-module-id="page/inline">
+    import { x } from 'base/common';
+    export let y = x * 5;
+  </script>
+  <script>
+    // entry point
+    require(['base/common', 'page/specific', 'page/inline']);
+  </script>
+{% endcompress %}
+```
+
+You need `babel-cli`, `babel-preset-es2015` and `babel-plugin-transform-es2015-modules-amd` to be installed.
+
+Quick install:
+
+```sh
+npm install -g babel-cli babel-preset-es2015 babel-plugin-transform-es2015-modules-amd
+```
