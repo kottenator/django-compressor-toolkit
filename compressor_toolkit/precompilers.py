@@ -75,14 +75,11 @@ class SCSSCompiler(BaseCompiler):
             font-size: $title-font-size;
         }
     """
-    command = app_config.SCSS_COMPILER_CMD or (
-        'node-sass --output-style expanded {paths} {infile} {outfile} && '
-        'postcss --use {node_modules}/autoprefixer '
-        '--autoprefixer.browsers "ie >= 9, > 5%" -r {outfile}'
-    )
+    command = app_config.SCSS_COMPILER_CMD
     options = (
         ('paths', ' '.join(['--include-path {}'.format(s) for s in get_all_static()])),
         ('node_modules', app_config.NODE_MODULES),
+        ('autoprefixer_browsers', app_config.AUTOPREFIXER_BROWSERS),
     )
     infile_ext = '.scss'
 
@@ -104,11 +101,7 @@ class ES6Compiler(BaseCompiler):
 
         controller.registerPages(login, signup);
     """
-    command = app_config.ES6_COMPILER_CMD or (
-        'export NODE_PATH={paths} && '
-        'browserify "{infile}" -o "{outfile}" --no-bundle-external --node '
-        '-t [ {node_modules}/babelify --presets={node_modules}/babel-preset-es2015 ]'
-    )
+    command = app_config.ES6_COMPILER_CMD
     options = (
         ('paths', os.pathsep.join(get_all_static())),
         ('node_modules', app_config.NODE_MODULES)
