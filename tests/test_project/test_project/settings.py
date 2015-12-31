@@ -28,3 +28,7 @@ COMPRESS_PRECOMPILERS = (
     ('module', 'compressor_toolkit.precompilers.ES6Compiler')
 )
 COMPRESS_ENABLED = False
+
+# path to folder with installed Node.js packages
+# auto-detect it for test purposes
+COMPRESS_NODE_PACKAGES = '`npm root -g`'
