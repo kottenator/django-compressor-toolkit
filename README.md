@@ -79,8 +79,8 @@ But there is a way to use it: transpilers that compile ES6 into good old ES5 syn
 
 The add-on does next:
 ES6 → (
-[Babel](http://babeljs.io/) +
-[Browserify](http://browserify.org/)
+[Browserify](http://browserify.org/) +
+[Babelify](https://github.com/babel/babelify)
 ) → ES5.
 
 It also enables Django static imports in ES6, see the example below.
@@ -129,7 +129,7 @@ new Framework('1.0.1');
 
 #### Requisites
 
-You need `babelify` and `babel-preset-es2015` to be installed. Quick install:
+You need `browserify`, `babelify` and `babel-preset-es2015` to be installed. Quick install:
 
 ```sh
 npm install -g browserify babelify babel-preset-es2015
