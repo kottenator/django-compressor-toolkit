@@ -1,13 +1,9 @@
-from django.core.exceptions import ImproperlyConfigured
-from django.templatetags.static import static
-import pytest
-
-from compressor_toolkit.precompilers import SCSSFilter, ES6Filter
+from compressor_toolkit.precompilers import SCSSCompiler, ES6Compiler
 
 
-def test_scss_filter():
+def test_scss_compiler():
     """
-    Test ``compressor_toolkit.precompilers.SCSSFilter`` on simple SCSS input.
+    Test ``compressor_toolkit.precompilers.SCSSCompiler`` on simple SCSS input.
     """
     input_scss = '''
     .a {
@@ -20,37 +16,20 @@ def test_scss_filter():
     }
     '''
     output_css = '.a .b {\n  padding-left: 5px;\n  padding-right: 6px;\n}\n'
-    assert SCSSFilter(input_scss, None).input() == output_css
+    assert SCSSCompiler(input_scss, {}).input() == output_css
 
 
-def test_es6_amd_filter():
+def test_es6_compiler():
     """
-    Test ``compressor_toolkit.precompilers.ES6Filter`` on simple ES6 input.
+    Test ``compressor_toolkit.precompilers.ES6Compiler`` on simple ES6 input.
     """
     input_es6 = 'export let CONST = 1'
-    output_js = (
+    output_es5 = (
         '"use strict";\n'
         '\n'
-        'define("%s", ["exports"], function (exports) {\n'
-        '  Object.defineProperty(exports, "__esModule", {\n'
-        '    value: true\n'
-        '  });\n'
-        '  var CONST = exports.CONST = 1;\n'
+        'Object.defineProperty(exports, "__esModule", {\n'
+        '  value: true\n'
         '});\n'
+        'var CONST = exports.CONST = 1;\n'
     )
-
-    module_id = 'my-module'
-    assert ES6Filter(
-        input_es6,
-        {'data-module-id': module_id}
-    ).input() == output_js % module_id
-
-    module_url = static('my-app/sub/module.js')
-    module_id = 'my-app/sub/module'
-    assert ES6Filter(
-        input_es6,
-        {'src': module_url}
-    ).input() == output_js % module_id
-
-    with pytest.raises(ImproperlyConfigured):
-        ES6Filter(input_es6, {}).input()
+    assert output_es5 in ES6Compiler(input_es6, {}).input()

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+{% load static %}
+{% load compress %}
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Compressor Tookit Tests: ES6 file → ES5 file</title>
+
+  {% compress js %}
+    <script type="module" src="{% static 'app/scripts.js' %}"></script>
+  {% endcompress %}
+</head>
+<body>
+  <h1 class="title">
+    Compressor Tookit Tests: ES6 file transformed to ES5 file
+  </h1>
+  <p>
+    Expected result: JS (ES5) file generated and JS console output:
+  </p>
+  <pre><code>
+    > Framework v1.0 initialized
+    > Framework v1.0.1 initialized
+  </code></pre>
+</body>
+</html>

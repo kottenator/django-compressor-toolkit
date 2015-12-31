@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+{% load static %}
+{% load compress %}
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Compressor Tookit Tests: Inline ES6 → inline ES5</title>
+
+  {% compress js %}
+    <script type="module">
+      let square = x => x * x;
+      console.log("Square of 2:", square(2));
+    </script>
+  {% endcompress %}
+</head>
+<body>
+  <h1 class="title">
+    Compressor Tookit Tests: Inline ES6 transformed to inline ES5
+  </h1>
+  <p>
+    Expected result: inline JS (ES5) code generated and JS console output:
+  </p>
+  <pre><code>
+    > Square of 2: 4
+  </code></pre>
+</body>
+</html>

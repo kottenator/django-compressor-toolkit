@@ -31,7 +31,7 @@ It also enables Django static imports in SCSS, see the example below.
 // settings.py
 
 COMPRESS_PRECOMPILERS = (
-    ('text/x-scss', 'compressor_toolkit.precompilers.SCSSFilter'),
+    ('text/x-scss', 'compressor_toolkit.precompilers.SCSSCompiler'),
 )
 ```
 
@@ -79,13 +79,12 @@ But there is a way to use it: transpilers that compile ES6 into good old ES5 syn
 
 The add-on does next:
 ES6 → (
-[Babel](https://github.com/sass/node-sass) +
-[AMD](https://github.com/amdjs/amdjs-api/blob/master/AMD.md)
+[Babel](http://babeljs.io/) +
+[Browserify](http://browserify.org/)
 ) → ES5.
 
-By default, AMD module ID is generated from file URL:
-`{{ STATIC_URL }}app/js/module.js` → `app/js/module`,
-but you can set it explicitly - see the example below.
+It also enables Django static imports in ES6, see the example below.
+
 
 #### Usage
 
@@ -93,7 +92,7 @@ but you can set it explicitly - see the example below.
 // settings.py
 
 COMPRESS_PRECOMPILERS = (
-    ('module', 'compressor_toolkit.precompilers.ES6Filter'),
+    ('module', 'compressor_toolkit.precompilers.ES6Compiler'),
 )
 ```
 
@@ -102,15 +101,8 @@ COMPRESS_PRECOMPILERS = (
 
 {% load compress %}
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.22/require.js"></script>
-
 {% compress js %}
-  <script type="module" src="{% static 'base/framework.js' %}"></script>
-  <script type="module" data-module-id="main/scripts" src="{% static 'app/scripts.js' %}"></script>
-  <script>
-    // entry point
-    require(['main/scripts']);
-  </script>
+  <script type="module" src="{% static 'app/scripts.js' %}"></script>
 {% endcompress %}
 ```
 
@@ -137,9 +129,8 @@ new Framework('1.0.1');
 
 #### Requisites
 
-You need `babel-cli`, `babel-preset-es2015` and `babel-plugin-transform-es2015-modules-amd`
-to be installed. Quick install:
+You need `babelify` and `babel-preset-es2015` to be installed. Quick install:
 
 ```sh
-npm install -g babel-cli babel-preset-es2015 babel-plugin-transform-es2015-modules-amd
+npm install -g browserify babelify babel-preset-es2015
 ```

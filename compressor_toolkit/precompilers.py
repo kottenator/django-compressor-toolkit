@@ -3,31 +3,52 @@ import os
 from compressor.filters import CompilerFilter
 from django.conf import settings
 from django.contrib.staticfiles import finders
-from django.core.exceptions import ImproperlyConfigured
+from django.core.files.temp import NamedTemporaryFile
 
 
-def get_all_static():
-    """
-    Get all the static files directories found by ``STATICFILES_FINDERS``
+class BaseCompiler(CompilerFilter):
+    infile_ext = ''
 
-    :return: set of paths (top-level folders only)
-    """
-    static_dirs = set()
+    def input(self, **kwargs):
+        """
+        Specify temporary input file extension.
 
-    for finder in settings.STATICFILES_FINDERS:
-        finder = finders.get_finder(finder)
+        Browserify requires explicit file extension (".js" or ".json" by default).
+        https://github.com/substack/node-browserify/issues/1469
+        """
+        if self.infile is None and "{infile}" in self.command:
+            if self.filename is None:
+                self.infile = NamedTemporaryFile(mode='wb', suffix=self.infile_ext)
+                self.infile.write(self.content.encode(self.default_encoding))
+                self.infile.flush()
+                self.options += (
+                    ('infile', self.infile.name),
+                )
+        return super(BaseCompiler, self).input(**kwargs)
 
-        if hasattr(finder, 'storages'):
-            for storage in finder.storages.values():
-                static_dirs.add(storage.location)
+    @staticmethod
+    def get_all_static():
+        """
+        Get all the static files directories found by ``STATICFILES_FINDERS``
 
-        if hasattr(finder, 'storage'):
-            static_dirs.add(finder.storage.location)
+        :return: set of paths (top-level folders only)
+        """
+        static_dirs = set()
 
-    return static_dirs
+        for finder in settings.STATICFILES_FINDERS:
+            finder = finders.get_finder(finder)
+
+            if hasattr(finder, 'storages'):
+                for storage in finder.storages.values():
+                    static_dirs.add(storage.location)
+
+            if hasattr(finder, 'storage'):
+                static_dirs.add(finder.storage.location)
+
+        return static_dirs
 
 
-class SCSSFilter(CompilerFilter):
+class SCSSCompiler(BaseCompiler):
     """
     django-compressor pre-compiler for SCSS files.
 
@@ -37,9 +58,11 @@ class SCSSFilter(CompilerFilter):
     2. ``postcss --use autoprefixer -r output.css``
     """
     command = (
-        'node-sass --output-style expanded {include-static} {infile} {outfile} && '
+        'node-sass --output-style expanded {paths} {infile} {outfile} && '
         'postcss --use autoprefixer --autoprefixer.browsers "ie >= 9, > 5%" -r {outfile}'
     )
+
+    infile_ext = '.scss'
 
     def __init__(self, content, attrs, *args, **kwargs):
         """
@@ -56,47 +79,43 @@ class SCSSFilter(CompilerFilter):
                 font-size: $title-font-size;
             }
         """
-        static_dirs = get_all_static()
-
         self.options += (
-            ('include-static', ' '.join(['--include-path {}'.format(s) for s in static_dirs])),
+            ('paths', ' '.join(['--include-path {}'.format(s) for s in self.get_all_static()])),
         )
 
-        super(SCSSFilter, self).__init__(content, self.command, *args, **kwargs)
+        super(SCSSCompiler, self).__init__(content, self.command, *args, **kwargs)
 
 
-class ES6Filter(CompilerFilter):
+class ES6Compiler(BaseCompiler):
     """
     django-compressor pre-compiler for ES6 files.
 
-    Transforms ES6 to ES5 AMD module using ``babel``.
+    Transforms ES6 to ES5 using Browserify + Babel.
     """
     command = (
-        'NPM_ROOT=`npm root -g` && '
-        'babel --presets=$NPM_ROOT/babel-preset-es2015 '
-        '--plugins=$NPM_ROOT/babel-plugin-transform-es2015-modules-amd '
-        '--module-id={module-id} "{infile}" -o "{outfile}"'
+        'export NODE_PATH={paths} && '
+        'browserify "{infile}" -o "{outfile}" --no-bundle-external --node '
+        '-t [ {node_modules}/babelify --presets={node_modules}/babel-preset-es2015 ]'
     )
+
+    infile_ext = '.js'
 
     def __init__(self, content, attrs, *args, **kwargs):
         """
-        Add extra option for compiler:
+        Include all available 'static' dirs:
 
-            'module-id': 'app/script'
+            export NODE_PATH="path/to/app-1/static/:path/to/app-2/static/" && browserify ...
 
-        That's AMD module ID for '/static/app/script.js' static file.
+        So you can do imports inside your ES6 modules:
+
+            import controller from 'app-1/page-controller';
+            import { login, signup } from 'app-2/pages';
+
+            controller.registerPages(login, signup);
         """
-        module_id = attrs.get('data-module-id')
-        if not module_id:
-            module_src = attrs.get('src')
-            if not module_src:
-                raise ImproperlyConfigured(
-                    "Module should contain either \"data-module-id\" or \"src\" attribute"
-                )
-            module_id = os.path.splitext(module_src.replace(settings.STATIC_URL, ''))[0]
-
         self.options += (
-            ('module-id', module_id),
+            ('node_modules', getattr(settings, 'COMPRESS_NODE_MODULES', '/usr/lib/node_modules')),
+            ('paths', os.pathsep.join(self.get_all_static())),
         )
 
-        super(ES6Filter, self).__init__(content, self.command, *args, **kwargs)
+        super(ES6Compiler, self).__init__(content, self.command, *args, **kwargs)

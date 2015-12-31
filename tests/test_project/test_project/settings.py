@@ -24,7 +24,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 COMPRESS_ROOT = os.path.join(BASE_DIR, 'compressor')
 COMPRESS_PRECOMPILERS = (
-    ('text/x-scss', 'compressor_toolkit.precompilers.SCSSFilter'),
-    ('module', 'compressor_toolkit.precompilers.ES6Filter')
+    ('text/x-scss', 'compressor_toolkit.precompilers.SCSSCompiler'),
+    ('module', 'compressor_toolkit.precompilers.ES6Compiler')
 )
 COMPRESS_ENABLED = False

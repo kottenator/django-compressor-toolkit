@@ -5,7 +5,7 @@ python:
 before_install:
   - nvm install 4.0
   - npm install -g node-sass postcss-cli autoprefixer
-  - npm install -g babel-cli babel-preset-es2015 babel-plugin-transform-es2015-modules-amd
+  - npm install -g browserify babelify babel-preset-es2015
 install:
   - pip install -e .[test]
 script:
