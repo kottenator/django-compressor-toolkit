@@ -11,6 +11,12 @@ that simply enables SCSS and ES6 in your Django project.
 pip install django-compressor-toolkit
 ```
 
+```py
+// settings.py
+
+INSTALLED_APPS += ('compressor_toolkit',)
+```
+
 ## Add-ons
 
 ### SCSS pre-compiler
@@ -136,13 +142,13 @@ npm install -g browserify babelify babel-preset-es2015
 
 ## Django settings
 
-### COMPRESS_NODE_MODULES
+### `COMPRESS_NODE_MODULES`
 
 Path to `node_modules` where `browserify`, `babelify`, `autoprefixer`, etc, are installed.
 
 Default: `/usr/lib/node_modules`
 
-### COMPRESS_SCSS_COMPILER_CMD
+### `COMPRESS_SCSS_COMPILER_CMD`
 
 Command that will be executed to transform SCSS into CSS code.
 
@@ -161,13 +167,13 @@ Placeholders:
 - `{node_modules}` - see `COMPRESS_NODE_MODULES` setting
 - `{autoprefixer_browsers}` - see `COMPRESS_AUTOPREFIXER_BROWSERS` setting
 
-### COMPRESS_AUTOPREFIXER_BROWSERS
+### `COMPRESS_AUTOPREFIXER_BROWSERS`
 
 Browser versions config for Autoprefixer.
 
 Default: `ie >= 9, > 5%`
 
-### COMPRESS_ES6_COMPILER_CMD
+### `COMPRESS_ES6_COMPILER_CMD`
 
 Command that will be executed to transform ES6 into ES5 code.
 
