@@ -29,6 +29,5 @@ COMPRESS_PRECOMPILERS = (
 )
 COMPRESS_ENABLED = False
 
-# path to folder with installed Node.js packages
-# auto-detect it for test purposes
-COMPRESS_NODE_PACKAGES = '`npm root -g`'
+# django-compressor-toolkit settings; see compressor_toolkit/apps.py for details
+COMPRESS_NODE_MODULES = os.getenv('COMPRESS_NODE_MODULES')
