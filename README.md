@@ -150,7 +150,7 @@ Default:
 
 ```sh
 node-sass --output-style expanded {paths} "{infile}" "{outfile}" &&
-postcss --use "{node_modules}/autoprefixer" --autoprefixer.browsers "{autoprefixer_browsers}" -r "{outfile}"'
+postcss --use "{node_modules}/autoprefixer" --autoprefixer.browsers "{autoprefixer_browsers}" -r "{outfile}"
 ```
 
 Placeholders:
