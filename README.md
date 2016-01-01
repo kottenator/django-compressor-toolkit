@@ -190,3 +190,12 @@ Placeholders:
 - `{paths}` - specially for `browserify`, include all Django app static folders:
   `/path/to/app-1/static/:/path/to/app-2/static/:...` (like `PATH` variable)
 - `{node_modules}` - see `COMPRESS_NODE_MODULES` setting
+
+## Contribute and test
+
+```sh
+git clone https://github.com/kottenator/django-compressor-toolkit.git
+cd django-compressor-toolkit
+pip install -e .[test]
+py.test
+```
