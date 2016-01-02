@@ -196,6 +196,6 @@ Placeholders:
 ```sh
 git clone https://github.com/kottenator/django-compressor-toolkit.git
 cd django-compressor-toolkit
-pip install -e .[test]
+pip install -e '.[test]'
 py.test
 ```
