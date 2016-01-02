@@ -1,10 +1,6 @@
 # Compiled
 *.pyc
 
-# Vagrant
-/.vagrant/
-/Vagrantfile
-
 # Tests
 /tests/test_project/compressor/
 /.coverage
@@ -16,3 +12,7 @@
 /*.egg-info/
 /.eggs/
 /.cache/
+
+# Vagrant
+/.vagrant/
+/Vagrantfile
