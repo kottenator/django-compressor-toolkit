@@ -1,14 +1,18 @@
-# Project generated files
+# Compiled
 *.pyc
-/tests/test_project/compressor/
-/*.egg-info/
-/.eggs/
 
 # Vagrant
 /.vagrant/
 /Vagrantfile
 
-# Python coverage
+# Tests
+/tests/test_project/compressor/
 /.coverage
 /coverage.xml
 /htmlcov/
+
+# Dist
+/dist/
+/*.egg-info/
+/.eggs/
+/.cache/
