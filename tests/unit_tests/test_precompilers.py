@@ -15,8 +15,8 @@ def test_scss_compiler():
         }
     }
     '''
-    output_css = '.a .b {\n  padding-left: 5px;\n  padding-right: 6px;\n}\n'
-    assert SCSSCompiler(input_scss, {}).input() == output_css
+    output_css = '.a .b {\n  padding-left: 5px;\n  padding-right: 6px;\n}'
+    assert SCSSCompiler(input_scss, {}).input().strip() == output_css
 
 
 def test_es6_compiler():

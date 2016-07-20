@@ -30,26 +30,26 @@ class CompressorToolkitConfig(AppConfig):
         'node_modules/.bin/node-sass' if LOCAL_NPM_INSTALL else 'postcss'
     )
 
-    # postcss executable
+    # Browser versions config for Autoprefixer
+    AUTOPREFIXER_BROWSERS = getattr(settings, 'COMPRESS_AUTOPREFIXER_BROWSERS', 'ie >= 9, > 5%')
+
+    # Custom SCSS transpiler command
+    SCSS_COMPILER_CMD = getattr(settings, 'COMPRESS_SCSS_COMPILER_CMD', (
+        '{node_sass_bin} --output-style expanded {paths} "{infile}" > "{outfile}" && '
+        '{postcss_bin} --use "{node_modules}/autoprefixer" '
+        '--autoprefixer.browsers "{autoprefixer_browsers}" -r "{outfile}"'
+    ))
+
+    # browserify executable
     BROWSERIFY_BIN = getattr(
         settings,
         'COMPRESS_BROWSERIFY_BIN',
         'node_modules/.bin/browserify' if LOCAL_NPM_INSTALL else 'browserify'
     )
 
-    # Custom SCSS transpiler command
-    SCSS_COMPILER_CMD = getattr(settings, 'COMPRESS_SCSS_COMPILER_CMD', (
-        NODE_SASS_BIN + ' --output-style expanded {paths} "{infile}" > "{outfile}" && ' +
-        POSTCSS_BIN + ' --use "{node_modules}/autoprefixer" '
-        '--autoprefixer.browsers "{autoprefixer_browsers}" -r "{outfile}"'
-    ))
-
-    # Browser versions config for Autoprefixer
-    AUTOPREFIXER_BROWSERS = getattr(settings, 'COMPRESS_AUTOPREFIXER_BROWSERS', 'ie >= 9, > 5%')
-
     # Custom ES6 transpiler command
     ES6_COMPILER_CMD = getattr(settings, 'COMPRESS_ES6_COMPILER_CMD', (
-        'export NODE_PATH="{paths}" && ' +
-        BROWSERIFY_BIN + ' "{infile}" -o "{outfile}" '
+        'export NODE_PATH="{paths}" && '
+        '{browserify_bin} "{infile}" -o "{outfile}" '
         '-t [ "{node_modules}/babelify" --presets="{node_modules}/babel-preset-es2015" ]'
     ))

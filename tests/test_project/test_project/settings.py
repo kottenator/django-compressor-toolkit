@@ -30,4 +30,5 @@ COMPRESS_PRECOMPILERS = (
 COMPRESS_ENABLED = False
 
 # django-compressor-toolkit settings; see compressor_toolkit/apps.py for details
-COMPRESS_NODE_MODULES = os.getenv('COMPRESS_NODE_MODULES')
+if 'COMPRESS_NODE_MODULES' in os.environ:
+    COMPRESS_NODE_MODULES = os.getenv('COMPRESS_NODE_MODULES')

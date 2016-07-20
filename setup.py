@@ -18,11 +18,8 @@ setup(
     license='MIT',
     packages=find_packages(exclude=['tests', 'tests.*']),
     include_package_data=True,
-    setup_requires=[
-        'setuptools-git'
-    ],
     install_requires=[
-        'django-compressor~=1.5'
+        'django-compressor>=1.5'
     ],
     extras_require={
         'test': [

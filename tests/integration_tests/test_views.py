@@ -1,3 +1,5 @@
+import re
+
 from django.core.urlresolvers import reverse
 
 
@@ -10,8 +12,8 @@ def test_view_with_scss_file(client, precompiled):
     """
     response = client.get(reverse('scss-file'))
     assert response.status_code == 200
-    assert precompiled('app/layout.scss', 'css') == \
-        '.title {\n  font: bold 30px Arial, sans-serif;\n}\n'
+    assert precompiled('app/layout.scss', 'css').strip() == \
+        '.title {\n  font: bold 30px Arial, sans-serif;\n}'
 
 
 def test_view_with_inline_scss(client):
@@ -22,9 +24,10 @@ def test_view_with_inline_scss(client):
     """
     response = client.get(reverse('scss-inline'))
     assert response.status_code == 200
-    assert b'<style type="text/css">' \
-           b'.title {\n  font: bold 30px Arial, sans-serif;\n}\n' \
-           b'</style>' in response.content
+    assert re.search(
+        r'<style type="text/css">.title \{\n\s*font: bold 30px Arial, sans-serif;\n\}\s*</style>',
+        response.content.decode()
+    )
 
 
 def test_view_with_es6_file(client, precompiled):
@@ -56,7 +59,28 @@ def test_view_with_es6_file(client, precompiled):
         'new _framework2.default();\n'
         'new _framework2.default(\'1.0.1\');\n'
         '\n'
-        '},{"base/framework":undefined}]},{},[1]);\n'
+        '},{"base/framework":2}],2:[function(require,module,exports){\n'
+        '\'use strict\';\n'
+        '\n'
+        'Object.defineProperty(exports, "__esModule", {\n'
+        '  value: true\n'
+        '});\n'
+        '\n'
+        'function _classCallCheck(instance, Constructor) {'
+        ' if (!(instance instanceof Constructor)) {'
+        ' throw new TypeError("Cannot call a class as a function"); } }\n'
+        '\n'
+        'var version = exports.version = \'1.0\';\n'
+        '\n'
+        'var _class = function _class(customVersion) {\n'
+        '  _classCallCheck(this, _class);\n'
+        '\n'
+        '  console.log(\'Framework v\' + (customVersion || version) + \' initialized\');\n'
+        '};\n'
+        '\n'
+        'exports.default = _class;\n'
+        '\n'
+        '},{}]},{},[1]);\n'
     )
 
 
