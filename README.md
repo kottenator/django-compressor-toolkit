@@ -162,8 +162,7 @@ Default: `True`.
 
 ### `COMPRESS_NODE_MODULES`
 
-Path to `node_modules` where `browserify`, `babelify`, `autoprefixer` (etc) libs
-(not executables) are installed.
+Path to `node_modules` where `babelify`, `autoprefixer`, etc, libs are installed.
 
 Default: `./node_modules` if `COMPRESS_LOCAL_NPM_INSTALL` else `/usr/lib/node_modules`.
 
