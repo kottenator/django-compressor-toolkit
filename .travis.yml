@@ -4,8 +4,8 @@ python:
   - 3.4
 before_install:
   - nvm install 4.0
-  - npm install -g node-sass postcss-cli autoprefixer
-  - npm install -g browserify babelify babel-preset-es2015
+  - npm install node-sass postcss-cli autoprefixer
+  - npm install browserify babelify babel-preset-es2015
 install:
   - pip install -e .[test]
 script:
