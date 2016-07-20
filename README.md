@@ -196,14 +196,14 @@ Default:
 ```
 
 Placeholders (i.e. they **can be re-used** in custom `COMPRESS_SCSS_COMPILER_CMD` string):
-- `{node_sass_bin}` - replaced with value from `COMPRESS_NODE_SASS_BIN`
-- `{postcss_bin}` - replaced with value from `COMPRESS_POSTCSS_BIN`
+- `{node_sass_bin}` - value from `COMPRESS_NODE_SASS_BIN`
+- `{postcss_bin}` - value from `COMPRESS_POSTCSS_BIN`
 - `{infile}` - input file path
 - `{outfile}` - output file path
 - `{paths}` - specially for `node-sass`, include all Django app static folders:
   `--include-path=/path/to/app-1/static/ --include-path=/path/to/app-2/static/ ...`
 - `{node_modules}` - see `COMPRESS_NODE_MODULES` setting
-- `{autoprefixer_browsers}` - replaced with value from `COMPRESS_AUTOPREFIXER_BROWSERS`
+- `{autoprefixer_browsers}` - value from `COMPRESS_AUTOPREFIXER_BROWSERS`
 
 ### `COMPRESS_BROWSERIFY_BIN`
 
@@ -224,7 +224,7 @@ Default:
 ```
 
 Placeholders:
-- `{browserify_bin}` - replaced with value from `COMPRESS_BROWSERIFY_BIN`
+- `{browserify_bin}` - value from `COMPRESS_BROWSERIFY_BIN`
 - `{infile}` - input file path
 - `{outfile}` - output file path
 - `{paths}` - specially for `browserify`, include all Django app static folders:
