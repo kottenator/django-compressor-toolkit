@@ -1,3 +1,5 @@
+import os
+
 from django.apps.config import AppConfig
 from django.conf import settings
 
@@ -5,24 +7,49 @@ from django.conf import settings
 class CompressorToolkitConfig(AppConfig):
     name = 'compressor_toolkit'
 
+    LOCAL_NPM_INSTALL = getattr(settings, 'COMPRESS_LOCAL_NPM_INSTALL', True)
+
     # Path to 'node_modules' where browserify, babelify, autoprefixer, etc, are installed
-    NODE_MODULES = getattr(settings, 'COMPRESS_NODE_MODULES', None) or '/usr/lib/node_modules'
+    NODE_MODULES = getattr(
+        settings,
+        'COMPRESS_NODE_MODULES',
+        os.path.abspath('node_modules') if LOCAL_NPM_INSTALL else '/usr/lib/node_modules'
+    )
+
+    # node-sass executable
+    NODE_SASS_BIN = getattr(
+        settings,
+        'COMPRESS_NODE_SASS_BIN',
+        'node_modules/.bin/node-sass' if LOCAL_NPM_INSTALL else 'node-sass'
+    )
+
+    # postcss executable
+    POSTCSS_BIN = getattr(
+        settings,
+        'COMPRESS_POSTCSS_BIN',
+        'node_modules/.bin/node-sass' if LOCAL_NPM_INSTALL else 'postcss'
+    )
+
+    # postcss executable
+    BROWSERIFY_BIN = getattr(
+        settings,
+        'COMPRESS_BROWSERIFY_BIN',
+        'node_modules/.bin/browserify' if LOCAL_NPM_INSTALL else 'browserify'
+    )
 
     # Custom SCSS transpiler command
-    SCSS_COMPILER_CMD = getattr(settings, 'COMPRESS_SCSS_COMPILER_CMD', None) or (
-        'node-sass --output-style expanded {paths} "{infile}" "{outfile}" && '
-        'postcss --use "{node_modules}/autoprefixer" '
+    SCSS_COMPILER_CMD = getattr(settings, 'COMPRESS_SCSS_COMPILER_CMD', (
+        NODE_SASS_BIN + ' --output-style expanded {paths} "{infile}" > "{outfile}" && ' +
+        POSTCSS_BIN + ' --use "{node_modules}/autoprefixer" '
         '--autoprefixer.browsers "{autoprefixer_browsers}" -r "{outfile}"'
-    )
+    ))
 
     # Browser versions config for Autoprefixer
-    AUTOPREFIXER_BROWSERS = getattr(settings, 'COMPRESS_AUTOPREFIXER_BROWSERS', None) or (
-        'ie >= 9, > 5%'
-    )
+    AUTOPREFIXER_BROWSERS = getattr(settings, 'COMPRESS_AUTOPREFIXER_BROWSERS', 'ie >= 9, > 5%')
 
     # Custom ES6 transpiler command
-    ES6_COMPILER_CMD = getattr(settings, 'COMPRESS_ES6_COMPILER_CMD', None) or (
-        'export NODE_PATH="{paths}" && '
-        'browserify "{infile}" -o "{outfile}" --no-bundle-external --node '
+    ES6_COMPILER_CMD = getattr(settings, 'COMPRESS_ES6_COMPILER_CMD', (
+        'export NODE_PATH="{paths}" && ' +
+        BROWSERIFY_BIN + ' "{infile}" -o "{outfile}" '
         '-t [ "{node_modules}/babelify" --presets="{node_modules}/babel-preset-es2015" ]'
-    )
+    ))
