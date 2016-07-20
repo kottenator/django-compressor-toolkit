@@ -26,7 +26,7 @@ def test_view_with_inline_scss(client):
     assert response.status_code == 200
     assert re.search(
         r'<style type="text/css">.title \{\n\s*font: bold 30px Arial, sans-serif;\n\}\s*</style>',
-        response.content.decode()
+        response.content.decode('utf8')
     )
 
 
