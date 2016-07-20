@@ -8,4 +8,4 @@ before_install:
 install:
   - pip install -e .[test]
 script:
-  - py.test
+  - py.test tests/unit_tests tests/integration_tests
