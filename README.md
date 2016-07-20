@@ -72,6 +72,12 @@ $title-size: 30px;
 You need `node-sass`, `postcss-cli` and `autoprefixer` to be installed. Quick install:
 
 ```sh
+npm install node-sass postcss-cli autoprefixer
+```
+
+Or you can install them globally (you need to set `COMPRESS_LOCAL_NPM_INSTALL = False`):
+
+```sh
 npm install -g node-sass postcss-cli autoprefixer
 ```
 
@@ -140,13 +146,11 @@ You need `browserify`, `babelify` and `babel-preset-es2015` to be installed. Qui
 npm install browserify babelify babel-preset-es2015
 ```
 
-Or you can install them globally:
+Or you can install them globally (you need to set `COMPRESS_LOCAL_NPM_INSTALL = False`):
 
 ```sh
 npm install -g browserify babelify babel-preset-es2015
 ```
-
-But then you need to set `COMPRESS_LOCAL_NPM_INSTALL = False`.
 
 ## Django settings
 
