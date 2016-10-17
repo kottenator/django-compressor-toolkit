@@ -18,19 +18,16 @@ setup(
     license='MIT',
     packages=find_packages(exclude=['tests', 'tests.*']),
     include_package_data=True,
-    setup_requires=[
-        'setuptools-git'
-    ],
     install_requires=[
-        'django-compressor~=1.5'
+        'django-compressor>=1.5'
     ],
     extras_require={
         'test': [
-            'django',
-            'pytest',
-            'pytest-django',
-            'pytest-cov',
-            'pytest-pythonpath'
+            'django~=1.8',
+            'pytest~=3.0',
+            'pytest-django~=3.0',
+            'pytest-cov~=2.4',
+            'pytest-pythonpath~=0.7'
         ]
     },
     classifiers=[
