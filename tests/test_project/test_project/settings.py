@@ -18,10 +18,25 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder'
 )
-MIDDLEWARE_CLASSES = ()
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.template.context_processors.static',
-)
+# Django < 1.8
+TEMPLATE_CONTEXT_PROCESSORS = [
+    'django.template.context_processors.static'
+]
+# Django >= 1.8
+TEMPLATES = [{
+    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    'APP_DIRS': True,
+    'OPTIONS': {
+        'context_processors': [
+            'django.template.context_processors.static'
+        ]
+    }
+}]
+# Django < 1.10
+MIDDLEWARE_CLASSES = []
+# Django >= 1.10
+MIDDLEWARE = []
+# django-compressor settings
 COMPRESS_ROOT = os.path.join(BASE_DIR, 'compressor')
 COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'compressor_toolkit.precompilers.SCSSCompiler'),
