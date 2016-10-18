@@ -26,11 +26,11 @@ setup(
     ],
     extras_require={
         'test': [
-            'django',
-            'pytest',
-            'pytest-django',
-            'pytest-cov',
-            'pytest-pythonpath'
+            'django>=1.8',
+            'pytest~=3.0',
+            'pytest-django~=3.0',
+            'pytest-cov~=2.4',
+            'pytest-pythonpath~=0.7'
         ]
     },
     classifiers=[
