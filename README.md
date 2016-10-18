@@ -72,6 +72,12 @@ $title-size: 30px;
 You need `node-sass`, `postcss-cli` and `autoprefixer` to be installed. Quick install:
 
 ```sh
+npm install node-sass postcss-cli autoprefixer
+```
+
+Or you can install them globally (you need to set `COMPRESS_LOCAL_NPM_INSTALL = False`):
+
+```sh
 npm install -g node-sass postcss-cli autoprefixer
 ```
 
@@ -137,16 +143,46 @@ export default class {
 You need `browserify`, `babelify` and `babel-preset-es2015` to be installed. Quick install:
 
 ```sh
+npm install browserify babelify babel-preset-es2015
+```
+
+Or you can install them globally (you need to set `COMPRESS_LOCAL_NPM_INSTALL = False`):
+
+```sh
 npm install -g browserify babelify babel-preset-es2015
 ```
 
 ## Django settings
 
+### `COMPRESS_LOCAL_NPM_INSTALL`
+
+Whether you install required NPM packages _locally_.
+
+Default: `True`.
+
 ### `COMPRESS_NODE_MODULES`
 
-Path to `node_modules` where `browserify`, `babelify`, `autoprefixer`, etc, are installed.
+Path to `node_modules` where `babelify`, `autoprefixer`, etc, libs are installed.
 
-Default: `/usr/lib/node_modules`
+Default: `./node_modules` if `COMPRESS_LOCAL_NPM_INSTALL` else `/usr/lib/node_modules`.
+
+### `COMPRESS_NODE_SASS_BIN`
+
+`node-sass` executable. It may be just the executable name (if it's on `PATH`) or the executable path.
+
+Default: `./node_modules/.bin/node-sass` if `COMPRESS_LOCAL_NPM_INSTALL` else `node-sass`.
+
+### `COMPRESS_POSTCSS_BIN`
+
+`postcss` executable. It may be just the executable name (if it's on `PATH`) or the executable path.
+
+Default: `./node_modules/.bin/postcss` if `COMPRESS_LOCAL_NPM_INSTALL` else `postcss`.
+
+### `COMPRESS_AUTOPREFIXER_BROWSERS`
+
+Browser versions config for Autoprefixer.
+
+Default: `ie >= 9, > 5%`.
 
 ### `COMPRESS_SCSS_COMPILER_CMD`
 
@@ -154,24 +190,26 @@ Command that will be executed to transform SCSS into CSS code.
 
 Default:
 
-```sh
-node-sass --output-style expanded {paths} "{infile}" "{outfile}" &&
-postcss --use "{node_modules}/autoprefixer" --autoprefixer.browsers "{autoprefixer_browsers}" -r "{outfile}"
+```py
+'{node_sass_bin} --output-style expanded {paths} "{infile}" "{outfile}" && '
+'{postcss_bin} --use "{node_modules}/autoprefixer" --autoprefixer.browsers "{autoprefixer_browsers}" -r "{outfile}"'
 ```
 
-Placeholders:
+Placeholders (i.e. they **can be re-used** in custom `COMPRESS_SCSS_COMPILER_CMD` string):
+- `{node_sass_bin}` - value from `COMPRESS_NODE_SASS_BIN`
+- `{postcss_bin}` - value from `COMPRESS_POSTCSS_BIN`
 - `{infile}` - input file path
 - `{outfile}` - output file path
 - `{paths}` - specially for `node-sass`, include all Django app static folders:
   `--include-path=/path/to/app-1/static/ --include-path=/path/to/app-2/static/ ...`
 - `{node_modules}` - see `COMPRESS_NODE_MODULES` setting
-- `{autoprefixer_browsers}` - see `COMPRESS_AUTOPREFIXER_BROWSERS` setting
+- `{autoprefixer_browsers}` - value from `COMPRESS_AUTOPREFIXER_BROWSERS`
 
-### `COMPRESS_AUTOPREFIXER_BROWSERS`
+### `COMPRESS_BROWSERIFY_BIN`
 
-Browser versions config for Autoprefixer.
+`browserify` executable. It may be just the executable name (if it's on `PATH`) or the executable path.
 
-Default: `ie >= 9, > 5%`
+Default: `./node_modules/.bin/browserify` if `COMPRESS_LOCAL_NPM_INSTALL` else `browserify`.
 
 ### `COMPRESS_ES6_COMPILER_CMD`
 
@@ -179,12 +217,14 @@ Command that will be executed to transform ES6 into ES5 code.
 
 Default:
 
-```sh
-export NODE_PATH="{paths}" && browserify "{infile}" -o "{outfile}" --no-bundle-external --node
--t [ "{node_modules}/babelify" --presets="{node_modules}/babel-preset-es2015" ]
+```py
+'export NODE_PATH="{paths}" && '
+'{browserify_bin} "{infile}" -o "{outfile}" --no-bundle-external --node '
+'-t [ "{node_modules}/babelify" --presets="{node_modules}/babel-preset-es2015" ]'
 ```
 
 Placeholders:
+- `{browserify_bin}` - value from `COMPRESS_BROWSERIFY_BIN`
 - `{infile}` - input file path
 - `{outfile}` - output file path
 - `{paths}` - specially for `browserify`, include all Django app static folders:
@@ -197,5 +237,6 @@ Placeholders:
 git clone https://github.com/kottenator/django-compressor-toolkit.git
 cd django-compressor-toolkit
 pip install -e '.[test]'
+npm install
 py.test
 ```

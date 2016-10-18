@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "devDependencies": {
+    "node-sass": "~3.10",
+    "postcss-cli": "~2.6",
+    "autoprefixer": "~6.5",
+    "browserify": "~13.1",
+    "babelify": "~7.3",
+    "babel-preset-es2015": "~6.16"
+  }
+}

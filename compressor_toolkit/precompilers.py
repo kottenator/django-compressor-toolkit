@@ -77,6 +77,8 @@ class SCSSCompiler(BaseCompiler):
     """
     command = app_config.SCSS_COMPILER_CMD
     options = (
+        ('node_sass_bin', app_config.NODE_SASS_BIN),
+        ('postcss_bin', app_config.POSTCSS_BIN),
         ('paths', ' '.join(['--include-path {}'.format(s) for s in get_all_static()])),
         ('node_modules', app_config.NODE_MODULES),
         ('autoprefixer_browsers', app_config.AUTOPREFIXER_BROWSERS),
@@ -103,6 +105,7 @@ class ES6Compiler(BaseCompiler):
     """
     command = app_config.ES6_COMPILER_CMD
     options = (
+        ('browserify_bin', app_config.BROWSERIFY_BIN),
         ('paths', os.pathsep.join(get_all_static())),
         ('node_modules', app_config.NODE_MODULES)
     )
