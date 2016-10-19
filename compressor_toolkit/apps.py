@@ -27,7 +27,7 @@ class CompressorToolkitConfig(AppConfig):
     POSTCSS_BIN = getattr(
         settings,
         'COMPRESS_POSTCSS_BIN',
-        'node_modules/.bin/node-sass' if LOCAL_NPM_INSTALL else 'postcss'
+        'node_modules/.bin/postcss' if LOCAL_NPM_INSTALL else 'postcss'
     )
 
     # Browser versions config for Autoprefixer
