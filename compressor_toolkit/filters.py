@@ -50,9 +50,9 @@ class CssDataUriFilter(BaseCssDataUriFilter):
     Override default ``compressor.filters.datauri.CssDataUriFilter``:
 
     - fix https://github.com/django-compressor/django-compressor/issues/776
-    - introduce new setting - ``COMPRESS_DATA_URI_PATH_PATTERN``,
-      to filter only specific file paths or extensions,
-      e.g. ``settings.COMPRESS_DATA_URI_PATH_PATTERN = '^.*\.svg$'``.
+    - introduce new settings - ``COMPRESS_DATA_URI_INCLUDE_PATHS`` and
+      ``COMPRESS_DATA_URI_EXCLUDE_PATHS`` - to filter only specific file paths or extensions,
+      e.g. ``settings.COMPRESS_DATA_URI_INCLUDE_PATHS = '\.svg$'``.
     """
     def input(self, filename=None, **kwargs):
         if not filename:
@@ -69,22 +69,28 @@ class CssDataUriFilter(BaseCssDataUriFilter):
 
         # Don't process URLs that start with: 'data:', 'http://', 'https://' and '/'.
         # We're interested only in relative URLs like 'images/icon.png' or '../images/icon.svg'
-        if re.match('^(data:|https?://|/)', url):
-            return
+        if not re.match('^(data:|https?://|/)', url):
+            file_path = self.get_file_path(url)
 
-        file_path = self.get_file_path(url)
+            # Include specific file paths (optional)
+            file_path_included = bool(
+                not hasattr(settings, 'COMPRESS_DATA_URI_INCLUDE_PATHS') or
+                re.match(settings.COMPRESS_DATA_URI_INCLUDE_PATHS, file_path)
+            )
 
-        # Process only specific file paths (optional)
-        if hasattr(settings, 'COMPRESS_DATA_URI_PATH_PATTERN'):
-            if not re.match(settings.COMPRESS_DATA_URI_PATH_PATTERN, file_path):
-                return
+            # Exclude specific file paths (optional)
+            file_path_excluded = bool(
+                hasattr(settings, 'COMPRESS_DATA_URI_EXCLUDE_PATHS') and
+                re.match(settings.COMPRESS_DATA_URI_EXCLUDE_PATHS, file_path)
+            )
 
-        try:
-            return super(CssDataUriFilter, self).data_uri_converter(matchobj)
-        except OSError:
-            logger.warning('"{}" file not found'.format(file_path))
+            if file_path_included and not file_path_excluded:
+                try:
+                    return super(CssDataUriFilter, self).data_uri_converter(matchobj)
+                except OSError:
+                    logger.warning('"{}" file not found'.format(file_path))
 
-        return "url('{}')".format(url)
+        return 'url("{}")'.format(url)
 
     def get_file_path(self, url):
         file_path = re.sub('[#?].*$', '', url)
