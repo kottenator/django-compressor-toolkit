@@ -219,7 +219,7 @@ Default:
 
 ```py
 'export NODE_PATH="{paths}" && '
-'{browserify_bin} "{infile}" -o "{outfile}" --no-bundle-external --node '
+'{browserify_bin} "{infile}" -o "{outfile}" '
 '-t [ "{node_modules}/babelify" --presets="{node_modules}/babel-preset-es2015" ]'
 ```
 
