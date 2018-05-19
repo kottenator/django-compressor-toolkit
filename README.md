@@ -47,7 +47,7 @@ COMPRESS_PRECOMPILERS = (
 {% load compress %}
 
 {% compress css %}
-  <link type="text/x-scss" href="{% static 'app/layout.scss' %}">
+  <link rel="stylesheet" type="text/x-scss" href="{% static 'app/layout.scss' %}">
 {% endcompress %}
 ```
 
